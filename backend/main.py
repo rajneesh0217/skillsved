@@ -60,8 +60,8 @@ def contact(payload: ContactRequest):
     created_at = datetime.now(timezone.utc).isoformat()
 
     try:
-   
-        with sqlite3.connect(DB_PATH) as conn:
+
+   with sqlite3.connect(DB_PATH) as conn:
             cur = conn.execute(
                 '''
                 INSERT INTO enquiries
@@ -84,6 +84,7 @@ def contact(payload: ContactRequest):
         'message': 'Enquiry received.',
         'id': enquiry_id
     }
+    
 @app.get('/')
 def home():
     return FileResponse(FRONTEND_DIR / 'index.html')

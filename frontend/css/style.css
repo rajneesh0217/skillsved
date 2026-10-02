@@ -1406,10 +1406,13 @@ textarea:focus-visible {
         font-size: 27px
     }
 
-    .program-metrics,
-    .stack-grid {
-        grid-template-columns: 1fr
-    }
+    .program-metrics {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.stack-grid {
+    grid-template-columns: 1fr;
+}
 
     .stack-grid .stack-ai {
         grid-column: auto
@@ -1779,5 +1782,11 @@ textarea:focus-visible {
 
     .phase {
         font-size: 9px;
+    }
+}
+/* Program metrics - phone layout */
+@media (max-width: 480px) {
+    .program-metrics {
+        grid-template-columns: 1fr;
     }
 }

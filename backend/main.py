@@ -34,6 +34,9 @@ class ContactRequest(BaseModel):
     phone: str = Field(default='', max_length=20)
     profile: str = Field(min_length=2, max_length=50)
     message: str = Field(default='', max_length=500)
+    program: str = Field(default='', max_length=120)
+    city: str = Field(default='', max_length=80)
+    expectation: str = Field(default='', max_length=100)
 
 @app.get('/api/health')
 def health():
@@ -62,6 +65,9 @@ def contact(payload: ContactRequest):
     phone = payload.phone.strip()
     profile = payload.profile.strip()
     message = payload.message.strip()
+    program = payload.program.strip()
+    city = payload.city.strip()
+    expectation = payload.expectation.strip()
 
     if phone and not re.fullmatch(r'[0-9+\-\s()]{7,20}', phone):
         raise HTTPException(422, 'Please enter a valid phone number.')
@@ -77,6 +83,28 @@ def contact(payload: ContactRequest):
     if profile not in allowed:
         raise HTTPException(422, 'Please select a valid profile.')
 
+    allowed_programs = {
+        'Data Analytics with GenAI & Agentic AI'
+    }
+
+    allowed_expectations = {
+        'Salary Growth',
+        'Upskilling',
+        'Job Switch',
+        'Start a Career in Data & AI',
+        'Learning / Knowledge',
+        'Other'
+    }
+
+    if program not in allowed_programs:
+        raise HTTPException(422, 'Please select a valid program.')
+
+    if len(city) < 2:
+        raise HTTPException(422, 'Please enter a valid city.')
+
+    if expectation not in allowed_expectations:
+        raise HTTPException(422, 'Please select a valid expectation.')
+
     created_at = datetime.now(timezone.utc).isoformat()
 
     try:
@@ -84,10 +112,30 @@ def contact(payload: ContactRequest):
             cur = conn.execute(
                 '''
                 INSERT INTO enquiries
-                (name, email, phone, profile, message, created_at)
-                VALUES (?, ?, ?, ?, ?, ?)
+                (
+                    name,
+                    email,
+                    phone,
+                    profile,
+                    message,
+                    created_at,
+                    program,
+                    city,
+                    expectation
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ''',
-                (name, email, phone, profile, message, created_at)
+                (
+                    name,
+                    email,
+                    phone,
+                    profile,
+                    message,
+                    created_at,
+                    program,
+                    city,
+                    expectation
+                )
             )
             conn.commit()
             enquiry_id = cur.lastrowid
@@ -113,14 +161,17 @@ def get_enquiries(_: bool = Depends(verify_admin_key)):
             rows = conn.execute(
                 '''
                 SELECT
-                    id,
-                    name,
-                    email,
-                    phone,
-                    profile,
-                    message,
-                    created_at
-                FROM enquiries
+    id,
+    name,
+    email,
+    phone,
+    program,
+    profile,
+    city,
+    expectation,
+    message,
+    created_at
+FROM enquiries
                 ORDER BY id DESC
                 '''
             ).fetchall()

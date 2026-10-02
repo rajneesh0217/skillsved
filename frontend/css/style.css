@@ -1795,3 +1795,158 @@ textarea:focus-visible {
 html {
     scroll-padding-top: 100px;
 }
+/* Enquiry popup */
+.enquiry-modal[hidden] {
+    display: none;
+}
+
+.enquiry-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.enquiry-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 18, 32, 0.72);
+    backdrop-filter: blur(6px);
+}
+
+.enquiry-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(760px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 24px;
+    padding: 34px;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+}
+
+.enquiry-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: #f0f4f7;
+    color: #061a2f;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.enquiry-modal-close:hover {
+    background: #e2e9ee;
+}
+
+.enquiry-modal-header {
+    padding-right: 45px;
+    margin-bottom: 24px;
+}
+
+.enquiry-modal-header h2 {
+    margin: 8px 0 10px;
+    color: #061a2f;
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+    line-height: 1.1;
+}
+
+.enquiry-modal-header h2 span {
+    color: #0b7f86;
+}
+
+.enquiry-modal-header > p:last-child {
+    margin: 0;
+    color: #5c6975;
+    line-height: 1.6;
+}
+
+.popup-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.popup-form-grid label {
+    display: grid;
+    gap: 7px;
+}
+
+.popup-form-grid label > span {
+    color: #182b3d;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.popup-form-grid input,
+.popup-form-grid select {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid #d7e0e7;
+    border-radius: 10px;
+    background: #fff;
+    color: #152536;
+    padding: 0 13px;
+    font: inherit;
+}
+
+.popup-form-grid input:focus,
+.popup-form-grid select:focus {
+    outline: 3px solid rgba(11, 127, 134, 0.16);
+    border-color: #0b7f86;
+}
+
+.popup-field-wide {
+    grid-column: 1 / -1;
+}
+
+.popup-submit {
+    width: 100%;
+    margin-top: 22px;
+    justify-content: center;
+}
+
+.popup-form-status {
+    min-height: 22px;
+    margin: 10px 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+body.enquiry-modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 600px) {
+    .enquiry-modal {
+        padding: 12px;
+    }
+
+    .enquiry-modal-dialog {
+        max-height: calc(100vh - 24px);
+        padding: 26px 18px 22px;
+        border-radius: 18px;
+    }
+
+    .enquiry-modal-header {
+        padding-right: 35px;
+        margin-bottom: 20px;
+    }
+
+    .popup-form-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .popup-field-wide {
+        grid-column: auto;
+    }
+}

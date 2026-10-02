@@ -69,11 +69,14 @@ function renderEnquiries(enquiries) {
         const row = document.createElement("tr");
 
         addCell(row, enquiry.name);
-        addCell(row, enquiry.email);
-        addCell(row, enquiry.phone || "—");
-        addCell(row, enquiry.profile);
-        addCell(row, enquiry.message || "—");
-        addCell(row, formatDate(enquiry.created_at));
+addCell(row, enquiry.email);
+addCell(row, enquiry.phone || "—");
+addCell(row, enquiry.program || "—");
+addCell(row, enquiry.profile || "—");
+addCell(row, enquiry.city || "—");
+addCell(row, enquiry.expectation || "—");
+addCell(row, enquiry.message || "—");
+addCell(row, formatDate(enquiry.created_at));
 
         tableBody.appendChild(row);
     });

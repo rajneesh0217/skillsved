@@ -1790,3 +1790,8 @@ textarea:focus-visible {
         grid-template-columns: 1fr;
     }
 }
+
+/* Keep anchored sections clear of the sticky header */
+html {
+    scroll-padding-top: 100px;
+}

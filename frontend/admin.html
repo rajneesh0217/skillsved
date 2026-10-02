@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>Skillsved Admin</title>
+
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+    <main class="admin-page">
+
+        <section class="admin-login">
+
+            <div class="admin-card">
+
+                <div class="admin-brand">
+                    <img
+                        src="assets/images/skillsved-logo.png"
+                        alt="Skillsved"
+                        class="admin-logo"
+                    >
+
+                    <p>Administration</p>
+                </div>
+
+                <div class="admin-heading">
+                    <h1>Admin Login</h1>
+                    <p>Sign in to view Skillsved enquiries.</p>
+                </div>
+
+                <form id="adminLoginForm">
+
+                    <div class="form-group">
+                        <label for="adminKey">Admin Access Key</label>
+
+                        <input
+                            type="password"
+                            id="adminKey"
+                            name="adminKey"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="login-button">
+                        Sign In
+                    </button>
+
+                    <p
+                        id="loginStatus"
+                        class="login-status"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+
+                </form>
+
+            </div>
+
+        </section>
+        <section class="admin-dashboard" id="adminDashboard" hidden>
+
+    <div class="dashboard-container">
+
+        <header class="dashboard-header">
+            <div>
+                <p class="dashboard-eyebrow">Skillsved Administration</p>
+                <h1>Enquiries</h1>
+                <p>View enquiries submitted through the Skillsved website.</p>
+            </div>
+
+            <button type="button" id="logoutButton" class="logout-button">
+                Log Out
+            </button>
+        </header>
+
+        <div class="dashboard-summary">
+            <div class="summary-card">
+                <span>Total Enquiries</span>
+                <strong id="enquiryCount">0</strong>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table class="enquiries-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Profile</th>
+                            <th>Message</th>
+                            <th>Received</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="enquiriesTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+    </main>
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

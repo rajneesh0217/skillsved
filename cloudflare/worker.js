@@ -17,7 +17,7 @@ export default {
             url.pathname === "/api/admin/enquiries" &&
             request.method === "GET"
         ) {
-            return handleAdminEnquiries(request, env);
+return handleAdminEnquiries(request, env);
         }
 
         return jsonResponse(
@@ -58,6 +58,21 @@ const ALLOWED_EXPECTATIONS = new Set([
 ]);
 
 async function handleContact(request, env) {
+        const clientIP =
+    request.headers.get("CF-Connecting-IP") || "unknown";
+
+const rateLimitResult = await env.CONTACT_RATE_LIMITER.limit({
+    key: `contact:${clientIP}`
+});
+
+    if (!rateLimitResult.success) {
+        return jsonResponse(
+            {
+                detail: "Too many enquiry attempts. Please try again shortly."
+            },
+            429
+        );
+    }
     let payload;
 
     try {

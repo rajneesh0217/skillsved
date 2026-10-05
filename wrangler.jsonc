@@ -16,5 +16,16 @@
             "database_name": "skillsved-db",
             "database_id": "9bb521c3-9854-4429-a219-65e2be20c328"
         }
-    ]
+    ],
+
+    "ratelimits": [
+    {
+        "name": "CONTACT_RATE_LIMITER",
+        "namespace_id": "1001",
+        "simple": {
+            "limit": 10,
+            "period": 60
+        }
+    }
+]
 }

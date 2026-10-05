@@ -77,6 +77,14 @@ async function handleContact(request, env) {
     const city = String(payload.city || "").trim();
     const expectation = String(payload.expectation || "").trim();
     const message = String(payload.message || "").trim();
+    const website = String(payload.website || "").trim();
+
+    if (website) {
+        return jsonResponse(
+            { status: "success", message: "Enquiry received." },
+            200
+        );
+    }
 
     if (name.length < 2 || name.length > 80) {
         return jsonResponse(

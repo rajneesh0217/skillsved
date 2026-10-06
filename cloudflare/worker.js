@@ -241,6 +241,22 @@ async function handleAdminEnquiries(request, env) {
     }
 
     if (!adminKey || adminKey !== env.ADMIN_API_KEY) {
+        const clientIP =
+            request.headers.get("CF-Connecting-IP") || "unknown";
+
+        const rateLimitResult = await env.ADMIN_RATE_LIMITER.limit({
+            key: `admin:${clientIP}`
+        });
+
+        if (!rateLimitResult.success) {
+            return jsonResponse(
+                {
+                    detail: "Too many failed login attempts. Please try again later."
+                },
+                429
+            );
+        }
+
         return jsonResponse(
             { detail: "Invalid admin credentials." },
             401

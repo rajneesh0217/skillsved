@@ -17,13 +17,12 @@ export default {
             url.pathname === "/api/admin/enquiries" &&
             request.method === "GET"
         ) {
-return handleAdminEnquiries(request, env);
+            return handleAdminEnquiries(request, env);
         }
 
-        return jsonResponse(
-            { detail: "Not found." },
-            404
-        );
+        const assetResponse = await env.ASSETS.fetch(request);
+        return addSecurityHeaders(assetResponse);
+
     }
 };
 
@@ -34,6 +33,23 @@ function jsonResponse(data, status = 200) {
             "Content-Type": "application/json; charset=UTF-8"
         }
     });
+}
+function addSecurityHeaders(response) {
+    const newResponse = new Response(response.body, response);
+
+    newResponse.headers.set(
+        "Content-Security-Policy",
+        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self';"
+    );
+    newResponse.headers.set("X-Content-Type-Options", "nosniff");
+    newResponse.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    newResponse.headers.set("X-Frame-Options", "DENY");
+    newResponse.headers.set(
+        "Permissions-Policy",
+        "camera=(), microphone=(), geolocation=()"
+    );
+
+    return newResponse;
 }
 
 const ALLOWED_PROFILES = new Set([
@@ -58,12 +74,12 @@ const ALLOWED_EXPECTATIONS = new Set([
 ]);
 
 async function handleContact(request, env) {
-        const clientIP =
-    request.headers.get("CF-Connecting-IP") || "unknown";
+    const clientIP =
+        request.headers.get("CF-Connecting-IP") || "unknown";
 
-const rateLimitResult = await env.CONTACT_RATE_LIMITER.limit({
-    key: `contact:${clientIP}`
-});
+    const rateLimitResult = await env.CONTACT_RATE_LIMITER.limit({
+        key: `contact:${clientIP}`
+    });
 
     if (!rateLimitResult.success) {
         return jsonResponse(

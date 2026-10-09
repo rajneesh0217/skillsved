@@ -1110,8 +1110,8 @@ textarea:focus-visible {
 .footer-grid {
     padding-bottom: 36px;
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 55px
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 40px;
 }
 
 .footer-brand {

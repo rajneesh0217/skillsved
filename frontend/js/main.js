@@ -16,12 +16,24 @@ if (reduce || !("IntersectionObserver" in window)) items.forEach(x => x.classLis
     const firstInput = modal.querySelector('input[name="name"]');
         const popupForm = document.getElementById("popup-lead-form");
     const popupStatus = document.getElementById("popup-form-status");
+    const courseDetailsLink = document.getElementById("view-course-details");
+let courseDetailsRequested = false;
+function hasCompletedEnquiry() {
+    try {
+        return sessionStorage.getItem("skillsved_enquiry_completed") === "true";
+    } catch (error) {
+        return false;
+    }
+}
 
     let appearanceCount = 0;
     let reopenTimer = null;
 
     function openEnquiryModal() {
-        if (appearanceCount >= 2) return;
+    if (
+        appearanceCount >= 2 ||
+        hasCompletedEnquiry()
+    ) return;
 
         appearanceCount += 1;
 
@@ -37,12 +49,35 @@ if (reduce || !("IntersectionObserver" in window)) items.forEach(x => x.classLis
         modal.hidden = true;
         document.body.classList.remove("enquiry-modal-open");
 
-        if (appearanceCount === 1) {
-            reopenTimer = setTimeout(openEnquiryModal, 15000);
-        }
+        if (appearanceCount === 1 && !courseDetailsRequested && !isCoursePage) {
+    reopenTimer = setTimeout(openEnquiryModal, 15000);
+}
     }
 
-    const firstPopupTimer = setTimeout(openEnquiryModal, 3000);
+    const isCoursePage = window.location.pathname.endsWith("/data-analytics-course.html");
+
+const firstPopupTimer = isCoursePage
+    ? null
+    : setTimeout(openEnquiryModal, 3000);
+    courseDetailsLink?.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    if (hasCompletedEnquiry()) {
+    window.location.assign("data-analytics-course.html");
+    return;
+}
+
+    courseDetailsRequested = true;
+
+    clearTimeout(firstPopupTimer);
+    clearTimeout(reopenTimer);
+
+    modal.hidden = false;
+    document.body.classList.add("enquiry-modal-open");
+
+    popupStatus.textContent = "";
+    firstInput?.focus();
+});
 
     closeButtons.forEach((button) => {
         button.addEventListener("click", closeEnquiryModal);
@@ -83,12 +118,30 @@ if (reduce || !("IntersectionObserver" in window)) items.forEach(x => x.classLis
 
                 popupStatus.classList.add("success");
                 popupStatus.textContent =
-                    "Thank-you for enquiry, our career advisor will connect you soon.";
+    "Thank you! Your enquiry has been received. The Skillsved team will contact you soon.";
+
+                    try {
+    sessionStorage.setItem("skillsved_enquiry_completed", "true");
+} catch (error) {
+    console.warn("Enquiry session status could not be saved.");
+}
 
                 popupForm.reset();
 
-                appearanceCount = 2;
-                clearTimeout(reopenTimer);
+appearanceCount = 2;
+clearTimeout(firstPopupTimer);
+clearTimeout(reopenTimer);
+
+if (courseDetailsRequested) {
+    popupStatus.textContent =
+        "Thank you! Your enquiry has been received. Opening the course details...";
+
+    setTimeout(() => {
+        window.location.assign("data-analytics-course.html");
+    }, 1200);
+
+    return;
+}
 
                 setTimeout(() => {
                     closeEnquiryModal();

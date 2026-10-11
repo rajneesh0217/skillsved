@@ -54,7 +54,9 @@ function hasCompletedEnquiry() {
 }
     }
 
-    const isCoursePage = window.location.pathname.endsWith("/data-analytics-course.html");
+    const isCoursePage = /^\/data-analytics-course(?:\.html)?\/?$/.test(
+    window.location.pathname
+);
 
 const firstPopupTimer = isCoursePage
     ? null
